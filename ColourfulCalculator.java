@@ -72,8 +72,7 @@ class CalculatorModel {
  * The View class for the Calculator UI.
  * 
  * This class is responsible for displaying the UI elements of the calculator,
- * such as
- * the screen, buttons, and layout. It does not handle any logic or user input
+ * such as the screen, buttons, and layout. It does not handle any logic or user input
  * processing:
  * those are handled by the Model and Controller.
  */
@@ -89,7 +88,7 @@ class CalculatorView extends JFrame {
     public CalculatorView() {
         // Set up the main window (JFrame) properties.
         setTitle("Colourful Calculator"); // Title of the window
-        setSize(300, 500); // Set the window size
+        setSize(360, 500); // Set the window size
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE); // Ensure the program exits when closed
 
         setLayout(new GridBagLayout());
@@ -99,12 +98,12 @@ class CalculatorView extends JFrame {
         screenConstraints.weighty = 0.2; // Give less priority to vertical resizing
         screenConstraints.gridx = 0; // Column 0
         screenConstraints.gridy = 0; // Row 0
-        screenConstraints.gridwidth = 4; // Span across 4 columns (adjust based on your button layout)
+        screenConstraints.gridwidth = 4; // Span across 4 columns 
 
         // Add the calculator screen
         calculatorScreen = new JTextField();
         calculatorScreen.setEditable(false); // Prevent user from typing directly
-        calculatorScreen.setFont(new Font("Cambria", Font.BOLD, 45)); // Font settings for readability
+        calculatorScreen.setFont(new Font("Cambria", Font.BOLD, 30)); // Font settings for readability
         calculatorScreen.setHorizontalAlignment(JTextField.RIGHT); // Align text to the right
         calculatorScreen.setBackground(Color.decode("#F0F4FF")); // Set background color
         calculatorScreen.setForeground(Color.decode("#071952"));
@@ -127,10 +126,10 @@ class CalculatorView extends JFrame {
         for (String text : buttons) {
             // Create a button with a specific label and color based on its purpose
             JButton button = createButton(text, switch (text) {
-                case "+", "-", "x", "÷", "←" -> Color.decode("#003366"); // White for operations
-                case "." -> getGradientColor(1); // Use a middle gradient value for the decimal button
+                case "+", "-", "x", "÷", "←" -> Color.decode("#003366");
+                case "." -> getGradientColor(1); // Use the first gradient value for the decimal button
                 case "0", "1", "2", "3", "4", "5", "6", "7", "8", "9" -> getGradientColor(Integer.parseInt(text)); // Gradient for numbers
-                default -> Color.decode("#FFFFFF"); // white for numbers
+                default -> Color.decode("#FFFFFF"); 
             });
 
             // Map buttons to their respective variables for later use
@@ -193,10 +192,6 @@ class CalculatorView extends JFrame {
 
     /**
      * Helper method to create a button with custom properties.
-     * 
-     * @param text            The Label for the button.
-     * @param backgroundColor The background color of the button.
-     * @return A configured JButton.
      */
     private JButton createButton(String text, Color backgroundColor) {
         JButton button = new JButton(text);
@@ -227,12 +222,11 @@ class CalculatorView extends JFrame {
      */
     private Color getGradientColor(int number) {
         // Create a gradient from yellow to orange for numbers 0-9
-        int red = 255; // Keep red at maximum for vibrant colors
+        int red = 255; 
         int green = 215 - (number * 15); // Gradual decrease in green for darker orange
-        int blue = 0; // Keep blue at 0 for a pure yellow-to-orange gradient
+        int blue = 0; 
         return new Color(Math.max(red, 0), Math.max(green, 0), Math.max(blue, 0));
     }
-    
     
 
     /**
