@@ -1,3 +1,10 @@
+/**
+ * NUR THAYIEBAH BINTI HAMDAN
+ * 1221305552
+ * TUTORIAL SECTION: T13L
+ * LECTURE SECTION: TC4L
+ */
+
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
