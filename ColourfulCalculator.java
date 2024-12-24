@@ -2,6 +2,8 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Entry point of the Colourful Calculator application.
@@ -80,7 +82,7 @@ class CalculatorView extends JFrame {
     private JTextField calculatorScreen; // Display field for showing input/output
     private JButton[] numberButtons = new JButton[10]; // Buttons for digits 0-9
     private JButton addButton, subtractButton, multiplyButton, divideButton,
-            equalButton, clearButton, backspaceButton, decimalButton; // Operation buttons
+            equalButton, clearButton, backspaceButton, decimalButton, historyButton; // Operation buttons
 
     /**
      * Constructor to initialize and set up the calculator UI
@@ -119,7 +121,7 @@ class CalculatorView extends JFrame {
 
         // Define button labels and set up buttons
         String[] buttons = { "7", "8", "9", "+", "4", "5", "6", "-",
-                "1", "2", "3", "x", "0", ".", "←", "÷" };
+                "1", "2", "3", "x", "0", ".", "←", "÷"};
         int row = 0;
         int column = 0;
 
@@ -172,11 +174,33 @@ class CalculatorView extends JFrame {
         
         // Add Clear button
         clearButton = createButton("C", Color.decode("#FF8C00")); 
-        buttonConstraints.gridx = 0;
+        buttonConstraints.gridx = 1;
         buttonConstraints.gridy = row;
-        buttonConstraints.gridwidth = 2;
+        buttonConstraints.gridwidth = 1;
         buttonConstraints.gridheight = 1;
         buttonPanel.add(clearButton, buttonConstraints);
+
+
+        // Create the history button with an image
+        ImageIcon historyIcon = new ImageIcon("historyIcon.png");
+        Image scaledImage = historyIcon.getImage().getScaledInstance(40, 40, Image.SCALE_SMOOTH); // Resize image
+        historyIcon = new ImageIcon(scaledImage);
+        historyButton = new JButton(historyIcon);
+
+        // Button appearance settings
+        historyButton.setBackground(Color.decode("#FF8C00"));
+        historyButton.setBorderPainted(false);
+        historyButton.setFocusPainted(false);
+        historyButton.setContentAreaFilled(false);
+        historyButton.setOpaque(false);
+
+        // Add history button
+        buttonConstraints.gridx = 0; // Set position
+        buttonConstraints.gridy = row;
+        buttonConstraints.gridwidth = 1;
+        buttonConstraints.gridheight = 1;
+        buttonPanel.add(historyButton, buttonConstraints);
+
 
         // Add Equals button
         equalButton = createButton("=", Color.decode("#FFD700")); 
@@ -188,6 +212,7 @@ class CalculatorView extends JFrame {
         buttonPanel.add(equalButton, buttonConstraints);
 
         add(buttonPanel, buttonPanelConstraints); // Add button panel to the center of the frame
+        
     }
 
     /**
@@ -271,6 +296,10 @@ class CalculatorView extends JFrame {
     public JButton getBackspaceButton() {
         return backspaceButton;
     }
+
+    public JButton getHistoryButton() {
+        return historyButton;
+    }
 }
 
 /**
@@ -284,6 +313,7 @@ class CalculatorView extends JFrame {
 class CalculatorController {
     private CalculatorModel model; // Reference to the Model (business logic)
     private CalculatorView view; // Reference to the View (UI)
+    private List<String> historyList = new ArrayList<>();
 
     private double firstNumber = 0; // Stores the first operand
     private double secondNumber = 0; // Stores the second operand
@@ -325,6 +355,8 @@ class CalculatorController {
 
         // Add listener for the backspace button
         view.getBackspaceButton().addActionListener(new BackspaceButtonListener());
+
+        view.getHistoryButton().addActionListener(new HistoryButtonListener());
     }
 
     /**
@@ -448,6 +480,39 @@ class CalculatorController {
     }
 
     /**
+ * Handles the history button click.
+ */
+private class HistoryButtonListener implements ActionListener {
+    @Override
+    public void actionPerformed(ActionEvent e) {
+        // Create a new JFrame for displaying history
+        JFrame historyFrame = new JFrame("Calculation History");
+        historyFrame.setSize(300, 400); // Set size of the history window
+        historyFrame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE); // Close only the history window
+
+        // Create a JTextArea to display history
+        JTextArea historyTextArea = new JTextArea();
+        historyTextArea.setEditable(false); // Make it read-only
+        historyTextArea.setFont(new Font("Cambria", Font.PLAIN, 16)); // Set font for readability
+
+        // Get the history from the model or a stored history variable
+        StringBuilder historyContent = new StringBuilder();
+        for (String record : historyList) { // Assume `historyList` stores the calculation history
+            historyContent.append(record).append("\n");
+        }
+        historyTextArea.setText(historyContent.toString());
+
+        // Add the JTextArea to a JScrollPane for scrolling
+        JScrollPane scrollPane = new JScrollPane(historyTextArea);
+        historyFrame.add(scrollPane);
+
+        // Make the history window visible
+        historyFrame.setVisible(true);
+    }
+}
+
+
+    /**
      * Processes the operator button click. Stores the current number and operator.
      */
     private void handleOperator(String op) {
@@ -465,6 +530,8 @@ class CalculatorController {
             view.getDisplayField().setText("Error"); // Show error if input is invalid
         }
     }
+
+    
 
     /**
      * Processes the equals (=) button click. Performs the calculation.
@@ -492,6 +559,9 @@ class CalculatorController {
                 }
             }
 
+            String calculation = firstNumber + " " + operator + " " + secondNumber + " = " + result;
+            historyList.add(calculation);
+
             // check if the result is whole number
             if (result == (long) result) {
                 // display as an integer
@@ -506,5 +576,6 @@ class CalculatorController {
             view.getDisplayField().setText("Error");
             resetOnNextInput = true;
         }
+        
     }
 }
