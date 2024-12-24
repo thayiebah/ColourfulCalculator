@@ -1,3 +1,4 @@
+
 /**
  * NUR THAYIEBAH BINTI HAMDAN
  * 1221305552
@@ -228,7 +229,7 @@ class CalculatorView extends JFrame {
     private JButton createButton(String text, Color backgroundColor) {
         JButton button = new JButton(text);
         button.setFont(new Font("Cambria", Font.BOLD, 30));
-        button.setForeground(Color.WHITE);// White text for visibility
+        button.setForeground(Color.WHITE);
         button.setOpaque(true); // Make button background visible
         button.setBorderPainted(false); // Remove default border
         button.setBackground(backgroundColor); // Set button background color
@@ -563,7 +564,15 @@ class CalculatorController {
                 }
             }
 
-            String calculation = firstNumber + " " + operator + " " + secondNumber + " = " + result;
+            // Format numbers for display
+            String formattedFirstNumber = (firstNumber == (long) firstNumber) ? String.valueOf((long) firstNumber)
+                    : String.valueOf(firstNumber);
+            String formattedSecondNumber = (secondNumber == (long) secondNumber) ? String.valueOf((long) secondNumber)
+                    : String.valueOf(secondNumber);
+            String formattedResult = (result == (long) result) ? String.valueOf((long) result) : String.valueOf(result);
+
+            String calculation = formattedFirstNumber + " " + operator + " " + formattedSecondNumber + " = "
+                    + formattedResult;
             historyList.add(calculation);
 
             // check if the result is whole number
