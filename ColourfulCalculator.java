@@ -10,9 +10,9 @@ import java.util.List;
  * 
  * Demonstrates the implementation of the MVC (Model-View-Controller) design
  * pattern:
- * - The Model (`CalculatorModel`) handles all calculation logic.
- * - The View (`CalculatorView`) is responsible for the user interface (UI).
- * - The Controller (`CalculatorController`) manages user interactions, updating
+ * - The Model (CalculatorModel) handles all calculation logic.
+ * - The View (CalculatorView) is responsible for the user interface (UI).
+ * - The Controller (CalculatorController) manages user interactions, updating
  * the Model and View accordingly.
  * 
  * This method initializes the components, links them, and makes the application
@@ -74,7 +74,8 @@ class CalculatorModel {
  * The View class for the Calculator UI.
  * 
  * This class is responsible for displaying the UI elements of the calculator,
- * such as the screen, buttons, and layout. It does not handle any logic or user input
+ * such as the screen, buttons, and layout. It does not handle any logic or user
+ * input
  * processing:
  * those are handled by the Model and Controller.
  */
@@ -100,7 +101,7 @@ class CalculatorView extends JFrame {
         screenConstraints.weighty = 0.2; // Give less priority to vertical resizing
         screenConstraints.gridx = 0; // Column 0
         screenConstraints.gridy = 0; // Row 0
-        screenConstraints.gridwidth = 4; // Span across 4 columns 
+        screenConstraints.gridwidth = 4; // Span across 4 columns
 
         // Add the calculator screen
         calculatorScreen = new JTextField();
@@ -121,7 +122,7 @@ class CalculatorView extends JFrame {
 
         // Define button labels and set up buttons
         String[] buttons = { "7", "8", "9", "+", "4", "5", "6", "-",
-                "1", "2", "3", "x", "0", ".", "←", "÷"};
+                "1", "2", "3", "x", "0", ".", "←", "÷" };
         int row = 0;
         int column = 0;
 
@@ -130,8 +131,10 @@ class CalculatorView extends JFrame {
             JButton button = createButton(text, switch (text) {
                 case "+", "-", "x", "÷", "←" -> Color.decode("#003366");
                 case "." -> getGradientColor(1); // Use the first gradient value for the decimal button
-                case "0", "1", "2", "3", "4", "5", "6", "7", "8", "9" -> getGradientColor(Integer.parseInt(text)); // Gradient for numbers
-                default -> Color.decode("#FFFFFF"); 
+                case "0", "1", "2", "3", "4", "5", "6", "7", "8", "9" -> getGradientColor(Integer.parseInt(text)); // Gradient
+                                                                                                                   // for
+                                                                                                                   // numbers
+                default -> Color.decode("#FFFFFF");
             });
 
             // Map buttons to their respective variables for later use
@@ -171,15 +174,13 @@ class CalculatorView extends JFrame {
         buttonPanelConstraints.gridy = 1; // Row 1 (below the calculator screen)
         buttonPanelConstraints.gridwidth = 4; // Span across 4 columns
 
-        
         // Add Clear button
-        clearButton = createButton("C", Color.decode("#FF8C00")); 
+        clearButton = createButton("C", Color.decode("#FF8C00"));
         buttonConstraints.gridx = 1;
         buttonConstraints.gridy = row;
         buttonConstraints.gridwidth = 1;
         buttonConstraints.gridheight = 1;
         buttonPanel.add(clearButton, buttonConstraints);
-
 
         // Create the history button with an image
         ImageIcon historyIcon = new ImageIcon("historyIcon.png");
@@ -201,9 +202,8 @@ class CalculatorView extends JFrame {
         buttonConstraints.gridheight = 1;
         buttonPanel.add(historyButton, buttonConstraints);
 
-
         // Add Equals button
-        equalButton = createButton("=", Color.decode("#FFD700")); 
+        equalButton = createButton("=", Color.decode("#FFD700"));
         equalButton.setForeground(Color.decode("#000000"));
         buttonConstraints.gridx = 2;
         buttonConstraints.gridy = row;
@@ -212,7 +212,7 @@ class CalculatorView extends JFrame {
         buttonPanel.add(equalButton, buttonConstraints);
 
         add(buttonPanel, buttonPanelConstraints); // Add button panel to the center of the frame
-        
+
     }
 
     /**
@@ -243,16 +243,15 @@ class CalculatorView extends JFrame {
     }
 
     /**
-     *  Helper method to provide gradient colors for numbers 
+     * Helper method to provide gradient colors for numbers
      */
     private Color getGradientColor(int number) {
         // Create a gradient from yellow to orange for numbers 0-9
-        int red = 255; 
+        int red = 255;
         int green = 215 - (number * 15); // Gradual decrease in green for darker orange
-        int blue = 0; 
+        int blue = 0;
         return new Color(Math.max(red, 0), Math.max(green, 0), Math.max(blue, 0));
     }
-    
 
     /**
      * Getter methods to allow the Controller to interact with the View elements.
@@ -356,6 +355,7 @@ class CalculatorController {
         // Add listener for the backspace button
         view.getBackspaceButton().addActionListener(new BackspaceButtonListener());
 
+        // Add listener for the history button
         view.getHistoryButton().addActionListener(new HistoryButtonListener());
     }
 
@@ -480,37 +480,36 @@ class CalculatorController {
     }
 
     /**
- * Handles the history button click.
- */
-private class HistoryButtonListener implements ActionListener {
-    @Override
-    public void actionPerformed(ActionEvent e) {
-        // Create a new JFrame for displaying history
-        JFrame historyFrame = new JFrame("Calculation History");
-        historyFrame.setSize(300, 400); // Set size of the history window
-        historyFrame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE); // Close only the history window
+     * Handles the history button click.
+     */
+    private class HistoryButtonListener implements ActionListener {
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            // Create a new JFrame for displaying history
+            JFrame historyFrame = new JFrame("Calculation History");
+            historyFrame.setSize(300, 400); // Set size of the history window
+            historyFrame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE); // Close only the history window
 
-        // Create a JTextArea to display history
-        JTextArea historyTextArea = new JTextArea();
-        historyTextArea.setEditable(false); // Make it read-only
-        historyTextArea.setFont(new Font("Cambria", Font.PLAIN, 16)); // Set font for readability
+            // Create a JTextArea to display history
+            JTextArea historyTextArea = new JTextArea();
+            historyTextArea.setEditable(false); // Make it read-only
+            historyTextArea.setFont(new Font("Cambria", Font.PLAIN, 16)); // Set font for readability
 
-        // Get the history from the model or a stored history variable
-        StringBuilder historyContent = new StringBuilder();
-        for (String record : historyList) { // Assume `historyList` stores the calculation history
-            historyContent.append(record).append("\n");
+            // Get the history from the model or a stored history variable
+            StringBuilder historyContent = new StringBuilder();
+            for (String record : historyList) { // Assume `historyList` stores the calculation history
+                historyContent.append(record).append("\n");
+            }
+            historyTextArea.setText(historyContent.toString());
+
+            // Add the JTextArea to a JScrollPane for scrolling
+            JScrollPane scrollPane = new JScrollPane(historyTextArea);
+            historyFrame.add(scrollPane);
+
+            // Make the history window visible
+            historyFrame.setVisible(true);
         }
-        historyTextArea.setText(historyContent.toString());
-
-        // Add the JTextArea to a JScrollPane for scrolling
-        JScrollPane scrollPane = new JScrollPane(historyTextArea);
-        historyFrame.add(scrollPane);
-
-        // Make the history window visible
-        historyFrame.setVisible(true);
     }
-}
-
 
     /**
      * Processes the operator button click. Stores the current number and operator.
@@ -530,8 +529,6 @@ private class HistoryButtonListener implements ActionListener {
             view.getDisplayField().setText("Error"); // Show error if input is invalid
         }
     }
-
-    
 
     /**
      * Processes the equals (=) button click. Performs the calculation.
@@ -576,6 +573,6 @@ private class HistoryButtonListener implements ActionListener {
             view.getDisplayField().setText("Error");
             resetOnNextInput = true;
         }
-        
+
     }
 }
